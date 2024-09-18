@@ -20,4 +20,7 @@ jobs:
         run: |
           kubectl get all -o wide
           DEPLOYMENT_NAME=$(kubectl get deployment | grep nginx | awk '{print $1}')
-          kubectl wait --for=condition=Ready deployment/$DEPLOYMENT_NAME --timeout=300s
+          sleep 150s
+          kubectl get pods
+          kubectl get deployment
+          kubectl wait --for=condition=Available deployment/$DEPLOYMENT_NAME --timeout=300s
