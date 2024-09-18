@@ -1,0 +1,23 @@
+name: Deploy Nginx Application
+on:
+  pull_request: 
+
+jobs:
+  testkube-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        
+      - name: Kind Cluster
+        uses: helm/kind-action@v1.9.0
+
+      - name: Deploy Sample Application
+        run: |
+          kubectl apply -f nginx-deployment.yaml
+
+      - name: Check Deployed Resources Status
+        run: |
+          kubectl get all -o wide
+          POD_NAME=$(kubectl get pods | grep nginx | awk '{print $1}')
+          kubectl wait --for=condition=Ready pod/$POD_NAME --timeout=150s
