@@ -1,7 +1,7 @@
 name: Deploy Nginx Application
 on:
-  pull_request: 
-
+  push:
+    branches: [ "main" ]
 jobs:
   app-test:
     runs-on: ubuntu-latest
@@ -19,5 +19,5 @@ jobs:
       - name: Check Deployed Resources Status
         run: |
           kubectl get all -o wide
-          POD_NAME=$(kubectl get pods | grep nginx | awk '{print $1}')
-          kubectl wait --for=condition=Ready pod/$POD_NAME --timeout=150s
+          DEPLOYMENT_NAME=$(kubectl get deployment | grep nginx | awk '{print $1}')
+          kubectl wait --for=condition=Ready DEPLOYMENT_NAME --timeout=150s
